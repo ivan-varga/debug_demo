@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">debug</string>
+    <string name="onboarding_description">Back in March 2021 we announced that we were joining the Endava family.\n\n Since then, it’s been business as usual for us, doing what we do best: designing, building and delivering great digital experiences.</string>
+    <string name="onboarding_button">I\'m in</string>
+</resources>
