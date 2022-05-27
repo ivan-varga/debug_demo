@@ -1,39 +1,31 @@
 package com.five.demo.debug.timer
 
-import android.util.Log
 import com.five.demo.debug.preferences.TimerPreferences
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.Singleton
 
 @Singleton
-@OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+@OptIn(ObsoleteCoroutinesApi::class)
 class TimerImpl(private val timerPreferences: TimerPreferences) : Timer {
-    private val isTimerActive = MutableStateFlow(false)
 
-    private val remainingTimeFlow = isTimerActive
-        .flatMapLatest {
-            if (it) {
-                timerPreferences.startMillis()
-                    .flatMapLatest { timestamp -> ticker(500L, 0L).receiveAsFlow().map { timestamp } }
-            } else {
-                timerPreferences.startMillis()
-            }
+    private val tickerFlow = ticker(100L, 0L).receiveAsFlow()
+
+    private val remainingTimeFlow =
+        combine(
+            timerPreferences.endMillis(),
+            timerPreferences.startMillis(),
+            tickerFlow
+        ) { end, start, _ ->
+            if (end < 0) System.currentTimeMillis() - start
+            else end - start
         }
-        .onEach { Log.d("asdfg", "timestamp $it") }
-        .map { Timestamp(it) }
-        .onEach { Log.d("asdfg", "mapped timestamp $it") }
+            .map { RemainingTime(it) }
 
-    override fun remainingTime(): Flow<Timestamp> = remainingTimeFlow
+    override fun remainingTime(): Flow<RemainingTime> = remainingTimeFlow
 
-    override suspend fun start() {
-        if (timerPreferences.startMillis().first() < 0) timerPreferences.start()
-        isTimerActive.value = true
-    }
+    override suspend fun start() = timerPreferences.start()
 
-    override suspend fun stop() {
-        isTimerActive.value = false
-    }
+    override suspend fun stop() = timerPreferences.stop()
 }

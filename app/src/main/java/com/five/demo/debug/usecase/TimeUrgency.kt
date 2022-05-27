@@ -13,5 +13,5 @@ class TimeUrgency(
     private val timerMapper: TimerMapper
 ) {
 
-    operator fun invoke(): Flow<Urgency> = timer.remainingTime().map { timerMapper.toUrgencyByTimeElapsed(System.currentTimeMillis() - it.value) }
+    operator fun invoke(): Flow<Urgency> = timer.remainingTime().map { timerMapper.toUrgencyByTimeElapsed(it.value) }
 }

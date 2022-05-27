@@ -14,7 +14,8 @@ private val DarkColorScheme = darkColorScheme(
     secondary = Color.White,
     background = Color.Black,
     surface = Color.Black,
-    tertiary = Color(0xff27ad05)
+    tertiary = Color(0xff4cd964),
+    surfaceVariant = Color(0xffffcc00)
 )
 
 /* Other default colors to override
@@ -33,8 +34,8 @@ fun DebugTheme(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = Color.Transparent)
-//    val window = (LocalView.current.context as Activity).window
-//    WindowCompat.setDecorFitsSystemWindows(window, false)
+    val window = (LocalView.current.context as Activity).window
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
     MaterialTheme(
         colorScheme = DarkColorScheme,

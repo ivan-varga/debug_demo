@@ -8,11 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,28 +34,33 @@ object Offices {
     @Composable
     fun Offices(
         officesViewModel: OfficesViewModel = get(),
-        onRadioButtonClick: () -> Unit = {}
+        onCorrectAnswerSelected: () -> Unit = {}
     ) {
         val time = officesViewModel.remainingTime().collectAsState(initial = "7:00")
         val urgency = officesViewModel.urgency().collectAsState(initial = Urgency.LOW)
+        val shouldShowQuestion = officesViewModel.showQuestion()
+        val selectedAnswer: State<SelectedAnswer> = officesViewModel.selectedAnswer().collectAsState(initial = SelectedAnswer.NONE)
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
+                .alpha(if (shouldShowQuestion) 1f else 0f)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.offices),
-                    contentDescription = "Endava Offices",
+                    contentDescription = stringResource(id = R.string.endava_offices),
                     modifier = Modifier
                         .fillMaxWidth(),
                     contentScale = ContentScale.FillWidth
                 )
                 Text(
-                    text = "How many offices does Endava have in Europe?",
+                    text = stringResource(id = R.string.endava_question),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 80.dp)
@@ -77,21 +85,21 @@ object Offices {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     RadioButton(
-                        selected = false,
-                        onClick = { onRadioButtonClick() }
+                        selected = selectedAnswer.value == SelectedAnswer.ANSWER_1,
+                        onClick = { officesViewModel.selectAnswer(SelectedAnswer.ANSWER_1) }
                     )
                     Text(
-                        text = "23",
+                        text = stringResource(id = R.string.endava_answer1),
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold
                     )
                     RadioButton(
-                        selected = false,
-                        onClick = { onRadioButtonClick() },
+                        selected = selectedAnswer.value == SelectedAnswer.ANSWER_2,
+                        onClick = { officesViewModel.selectAnswer(SelectedAnswer.ANSWER_2) },
                         modifier = Modifier.padding(start = 64.dp)
                     )
                     Text(
-                        text = "12",
+                        text = stringResource(id = R.string.endava_answer2),
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold
                     )
@@ -103,21 +111,24 @@ object Offices {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     RadioButton(
-                        selected = false,
-                        onClick = { onRadioButtonClick() }
+                        selected = selectedAnswer.value == SelectedAnswer.ANSWER_3,
+                        onClick = {
+                            officesViewModel.selectAnswer(SelectedAnswer.ANSWER_3)
+                            onCorrectAnswerSelected()
+                        }
                     )
                     Text(
-                        text = "55",
+                        text = stringResource(id = R.string.endava_answer3),
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold
                     )
                     RadioButton(
-                        selected = false,
-                        onClick = { onRadioButtonClick() },
+                        selected = selectedAnswer.value == SelectedAnswer.ANSWER_4,
+                        onClick = { officesViewModel.selectAnswer(SelectedAnswer.ANSWER_4) },
                         modifier = Modifier.padding(start = 64.dp)
                     )
                     Text(
-                        text = "8",
+                        text = stringResource(id = R.string.endava_answer4),
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold
                     )

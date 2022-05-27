@@ -25,11 +25,7 @@ class TimerMapperImpl : TimerMapper {
 
         val presentableSeconds = seconds % 60
 
-        return buildString {
-            append(minutes)
-            append(":")
-            append(if (presentableSeconds < 10) "0$presentableSeconds" else "$presentableSeconds")
-        }
+        return "$minutes:${if (presentableSeconds < 10) "0$presentableSeconds" else "$presentableSeconds"}"
     }
 
     override fun toUrgencyByTimeElapsed(timeElapsed: Long, totalTime: Long): Urgency {

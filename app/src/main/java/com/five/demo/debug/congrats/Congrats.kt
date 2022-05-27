@@ -23,8 +23,8 @@ object Congrats {
     @Composable
     fun Congrats(congratsViewModel: CongratsViewModel = get()) {
         val email: State<String> = congratsViewModel.email().collectAsState(initial = "")
-        val time: State<String> = congratsViewModel.finalTime().collectAsState(initial = "X")
-        val exactTime: State<String> = congratsViewModel.exactTime().collectAsState(initial = "0:00")
+        val time: State<String> = congratsViewModel.timeWon().collectAsState(initial = "0m")
+        val exactTime: State<String> = congratsViewModel.exactTime().collectAsState(initial = "00:00")
         Column(
             modifier = Modifier
                 .fillMaxSize()

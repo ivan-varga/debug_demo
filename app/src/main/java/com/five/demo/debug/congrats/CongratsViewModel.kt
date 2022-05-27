@@ -1,19 +1,13 @@
 package com.five.demo.debug.congrats
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.five.demo.debug.email.EmailSource
 import com.five.demo.debug.usecase.RemainingFormattedTime
 import com.five.demo.debug.usecase.StopTimer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import kotlin.math.roundToInt
 
 @KoinViewModel
 class CongratsViewModel(
@@ -29,17 +23,18 @@ class CongratsViewModel(
         }
     }
 
-    fun finalTime(): Flow<String> = remainingFormattedTime().map {
-        Log.d("asdfg", "finalTime")
+    fun timeWon(): Flow<String> = remainingFormattedTime().map {
         val timeTokens = it.split(":")
-        (timeTokens[0].toInt() + (timeTokens[1].toFloat() / 60f).roundToInt()).toString()
+
+        if (timeTokens.all { it.toInt() == 0 }) timeTokens[0]
+        else (timeTokens[0].toInt() + 1).coerceAtMost(5).toString()
     }
 
-    fun exactTime(): Flow<String> = remainingFormattedTime().onEach {
-        Log.d("asdfg", "exactTime")
-    }
+    fun exactTime(): Flow<String> = remainingFormattedTime()
 
-    fun email(): Flow<String> = emailSource.email().onEach {
-        Log.d("asdfg", "email")
+    fun email(): Flow<String> = emailSource.email()
+
+    override fun onCleared() {
+        bgScope.cancel()
     }
 }

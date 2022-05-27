@@ -6,5 +6,9 @@ interface TimerPreferences {
 
     fun startMillis(): Flow<Long>
 
+    fun endMillis(): Flow<Long>
+
     suspend fun start()
+
+    suspend fun stop()
 }
