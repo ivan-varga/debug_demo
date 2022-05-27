@@ -17,14 +17,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraphBuilder
 import com.five.demo.debug.R
+import com.five.demo.debug.timer.Urgency
+import com.five.demo.debug.ui.components.toColor
 import com.five.demo.debug.ui.theme.DebugTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import org.koin.androidx.compose.get
 
 object OnBoarding {
     const val route = "onboarding"
+
+    fun NavGraphBuilder.registerDestination() {
+
+    }
 
     @Composable
     fun OnBoarding(
@@ -32,7 +37,8 @@ object OnBoarding {
         onDoneClick: () -> Unit = {}
     ) {
 
-        val timeRemaining = onBoardingViewModel.timeRemaining().collectAsState(initial = "7:00", context = (SupervisorJob() + Dispatchers.Main))
+        val timeRemaining = onBoardingViewModel.remainingTimeFormatted().collectAsState(initial = "7:00")
+        val urgencyColor = onBoardingViewModel.urgency().collectAsState(initial = Urgency.LOW)
 
         Column(
             modifier = Modifier
@@ -83,7 +89,7 @@ object OnBoarding {
                 modifier = Modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(urgencyColor.value.toColor())
                     .padding(vertical = 8.dp)
                     .navigationBarsPadding(),
                 fontWeight = FontWeight.Bold,

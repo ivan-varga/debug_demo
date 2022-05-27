@@ -12,7 +12,8 @@ private val KEY_TIMER = longPreferencesKey("timer")
 
 @Singleton
 class TimerPreferencesImpl(private val preferences: DataStore<Preferences>) : TimerPreferences {
-    private val startTimestampMillis = preferences.data.mapNotNull { it[KEY_TIMER] ?: -1}
+    private val startTimestampMillis = preferences.data
+        .mapNotNull { it[KEY_TIMER] ?: -1 }
 
     override fun startMillis(): Flow<Long> = startTimestampMillis
 

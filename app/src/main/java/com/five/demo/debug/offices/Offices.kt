@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -18,14 +19,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.five.demo.debug.R
+import com.five.demo.debug.timer.Urgency
+import com.five.demo.debug.ui.components.toColor
 import com.five.demo.debug.ui.theme.DebugTheme
+import org.koin.androidx.compose.get
 
 object Offices {
     const val route = "offices"
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Offices() {
+    fun Offices(
+        officesViewModel: OfficesViewModel = get(),
+        onRadioButtonClick: () -> Unit = {}
+    ) {
+        val time = officesViewModel.remainingTime().collectAsState(initial = "7:00")
+        val urgency = officesViewModel.urgency().collectAsState(initial = Urgency.LOW)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -68,8 +77,8 @@ object Offices {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     RadioButton(
-                        selected = true,
-                        onClick = { /*TODO*/ }
+                        selected = false,
+                        onClick = { onRadioButtonClick() }
                     )
                     Text(
                         text = "23",
@@ -78,7 +87,7 @@ object Offices {
                     )
                     RadioButton(
                         selected = false,
-                        onClick = { /*TODO*/ },
+                        onClick = { onRadioButtonClick() },
                         modifier = Modifier.padding(start = 64.dp)
                     )
                     Text(
@@ -95,33 +104,35 @@ object Offices {
                 ) {
                     RadioButton(
                         selected = false,
-                        onClick = { /*TODO*/ }
+                        onClick = { onRadioButtonClick() }
                     )
                     Text(
-                        text = "23",
+                        text = "55",
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold
                     )
                     RadioButton(
                         selected = false,
-                        onClick = { /*TODO*/ },
+                        onClick = { onRadioButtonClick() },
                         modifier = Modifier.padding(start = 64.dp)
                     )
                     Text(
-                        text = "12",
+                        text = "8",
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
 
+
+
             Text(
-                text = "7:00",
+                text = time.value,
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(urgency.value.toColor())
                     .padding(vertical = 8.dp)
                     .navigationBarsPadding(),
                 fontWeight = FontWeight.Bold,

@@ -2,7 +2,6 @@ package com.five.demo.debug.timer
 
 import kotlinx.coroutines.flow.Flow
 
-
 data class Timestamp(
     val value: Long
 ) {
@@ -15,5 +14,7 @@ interface Timer {
 
     fun remainingTime(): Flow<Timestamp>
 
-    suspend fun startTimer()
+    suspend fun start()
+
+    suspend fun stop()
 }
