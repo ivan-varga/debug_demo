@@ -3,9 +3,11 @@ package com.five.demo.debug
 import android.app.Application
 import com.five.demo.debug.congrats.CongratsModule
 import com.five.demo.debug.email.EmailModule
+import com.five.demo.debug.main.MainModule
 import com.five.demo.debug.offices.OfficesModule
 import com.five.demo.debug.onboarding.OnBoardingModule
 import com.five.demo.debug.preferences.PreferencesModule
+import com.five.demo.debug.terms.TermsModule
 import com.five.demo.debug.timer.TimerModule
 import com.five.demo.debug.usecase.UseCaseModule
 import org.koin.android.ext.koin.androidContext
@@ -26,6 +28,8 @@ class DebugApplication : Application() {
                 UseCaseModule().module,
                 CongratsModule().module,
                 OfficesModule().module,
+                MainModule().module,
+                TermsModule().module,
             )
         }
     }

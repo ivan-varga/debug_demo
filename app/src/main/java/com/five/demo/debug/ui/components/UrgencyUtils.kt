@@ -9,6 +9,6 @@ import com.five.demo.debug.timer.Urgency
 fun Urgency.toColor(): Color =
     when (this) {
         Urgency.LOW -> MaterialTheme.colorScheme.tertiary
-        Urgency.MEDIUM -> MaterialTheme.colorScheme.primary
+        Urgency.MEDIUM -> MaterialTheme.colorScheme.surfaceVariant
         Urgency.HIGH -> MaterialTheme.colorScheme.errorContainer
     }

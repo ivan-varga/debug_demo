@@ -36,5 +36,7 @@ class CongratsViewModel(
 
     override fun onCleared() {
         bgScope.cancel()
+
+        super.onCleared()
     }
 }

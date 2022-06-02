@@ -68,7 +68,7 @@ object EmailSubmission {
                         focusManager.clearFocus()
                     })
                 )
-                Button(onClick = onSubmit) {
+                Button(onClick = { }) { // Do nothing?
                     Text(
                         text = "Submit",
                         color = MaterialTheme.colorScheme.secondary,
